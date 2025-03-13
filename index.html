@@ -170,7 +170,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-03-13 21:32:39 / Modified: 21:33:52" itemprop="dateCreated datePublished" datetime="2025-03-13T21:32:39+08:00">2025-03-13</time>
+              <time title="Created: 2025-03-13 21:32:39 / Modified: 21:36:00" itemprop="dateCreated datePublished" datetime="2025-03-13T21:32:39+08:00">2025-03-13</time>
             </span>
 
           
@@ -198,40 +198,14 @@
 <li>进入项目目录安装依赖：<code>cd myBlog</code> <code>npm install</code>；</li>
 <li>启动Hexo服务：<code>hexo server</code>，浏览器访问<a target="_blank" rel="noopener" href="http://localhost:4000/%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F%EF%BC%9B">http://localhost:4000/验证安装是否成功；</a></li>
 </ol>
-<p><strong>更换Next主题：</strong></p>
-<ol>
-<li><p>进入项目目录克隆Next主题文件到themes文件夹：</p>
-<p><code>git clone https://github.com/theme-next/hexo-theme-next themes/next</code></p>
-</li>
-<li><p>将<code>_config.yml</code>文件中的主题参数，设置<code>theme: next</code></p>
-</li>
-<li><p>启动Hexo服务，验证Next主题是否适用：<code>hexo server</code></p>
-</li>
-<li><p>通过在文章想要折叠的部分加<code>&lt;!-- more --&gt;</code>可以控制折叠，感谢<a target="_blank" rel="noopener" href="https://blog.csdn.net/RayDon03/article/details/104441437">This Blog</a></p>
-</li>
-</ol>
-<p><strong>设置加密访问：</strong></p>
-<ol>
-<li><p>安装加密插件：<code>npm install hexo-blog-encrypt</code></p>
-</li>
-<li><p>添加<code>password</code>字段到文章信息头：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2016-03-30 21:18:02</span><br><span class="line">password: <span class="language-xml"><span class="tag">&lt;<span class="name">yourpassword</span>&gt;</span></span></span><br><span class="line"><span class="section">abstract: Here&#x27;s something encrypted, password is required to continue reading.</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<p><strong>将页面部署到Github：</strong></p>
-<ol>
-<li><p>修改<code>_config.yml</code>：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">https://github.com/&lt;username&gt;/&lt;username&gt;.github.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装deploy-git：<code>npm install hexo-deployer-git --save</code></p>
-</li>
-<li><p>清除之前的生成：<code>hexo clean</code></p>
-</li>
-<li><p>生成静态文章：<code>hexo generate</code></p>
-</li>
-<li><p>部署文章：<code>hexo deploy</code></p>
-</li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/13/Hexo+Github%E9%83%A8%E7%BD%B2%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
