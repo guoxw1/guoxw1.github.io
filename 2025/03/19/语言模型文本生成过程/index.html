@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="You need password to read this blog.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语言模型文本生成过程">
+<meta property="og:url" content="http://example.com/2025/03/19/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/index.html">
+<meta property="og:site_name" content="gxw">
+<meta property="og:description" content="You need password to read this blog.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-03-19T13:14:38.087Z">
+<meta property="article:modified_time" content="2025-03-19T13:28:13.353Z">
+<meta property="article:author" content="gxw">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2025/03/19/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>语言模型文本生成过程 | gxw</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">gxw</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/19/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="gxw">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="gxw">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          语言模型文本生成过程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-03-19 21:14:38 / Modified: 21:28:13" itemprop="dateCreated datePublished" datetime="2025-03-19T21:14:38+08:00">2025-03-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="75870aa4f901c50e324dbaa4c662239129d5aba760d18080bd422cb1966bad2f">165d50f05814027fb7fe5e4ae8a088d8ed45cb227c5039853179c5405e990a0b65dbf2e6bda9163f62a70d27c74c3198fc7695b2c91d5fd6a2eb058eb68a6110ba038b648ce7d41bd5d2a963f3666262ecb985e499108f3873ef6fcd41ccbf5db5773b1c21e380295b459c137a379dd0ef5e0368c3271501caefb2bf9f7ae4bb00a0f39ae99bcb98d83f4e0099c769c2d47777fe17b68b09ddeb3a2329fb6ac7ebcc34b41f9bea0c309220d84141f126d8cdb8503e46a5e1adff0f01872cd393fd4165603413e16187341b1f5b44996a23e1f43e8b0595f6829e1c3d97ddd26b1dbe14803637896ef625a4280dff346bfb385efd07ccdc6fa09cd35e4db1a6d0f3f9475222db080f7c0e03eae55044a4861e21d287470d1b03e0d9cd31239ecaef566062a870b22a54551224d20cb98fcbeb4f5acf5df72b6c69f57afb1fe22ee11352bb94c3480dc34c189580e34b2f8b388fccd5bca488e41c9ea3b35726064a094f380189692a5d29d81a4103416747f4932ec74babf95bb48a58e57e98165a4db2855b8c6711477b28e537d1fdb29b4969f91987ac3ecb03f09e8a5cd31d96219f9f8db2828ea72ec3d7c489959920f81f321e425d06773f36d48e8ba2c7233b7fde91301af021791ef71ceaec6e4a94fed6707b17ea80ff79289f2f73cbb0a8215d04413f78572202315cd3dfbb321f25fec3e4e61569f716f17a09c8378c5ebfee38480d184f2a5262d1713da8d746d3c204c72e991e5ae1fe4d17feade47b4fa0b5384ff09eba43af52a0d5d16156869b326b445a5b7e3e79a8f23c569a81f545c0ee3571077861a16adff1263b3ca3c7f4b0257d1c603080293dc79954a9b78cec1db76564a916eb8cde54e69573d0d8f0b06f373a46a6d13420fcc4c5e4312ee435790695238a561d32fd85eeadef55e25bf9b32f3248ed3aad527e5690d2f47c1cac559d94e739144cbcb47875a245e62d2d781f2cfaf83aac0eadbcf77078daaf7a50a2eea727f30f32bce6d60b9750eccee3b96742c7c731241ae1225cef6502ab9e3a575ed04906a8c994e8d5cbf15e7340b867831d59739bf7a3f3226538e134dfbab97691cea87ed86c3b0e8369ef1d58e8b69dc386cc84932f72cf8da22b741f8a25342ea899e818f19632dc72d82a9555a1ac05689c7b1d32e09ce194b891b5aad7d4a4fb4d722f18ebbd337f3abd133e5bef6268c2a3d6f2262ce28b51ef67e75602450cac61fa2496dcc7d5e07e732e9e85b61a67868cfb48f673d3d18644a37292c514935c7269cbd4da610a161357f052b4f05abd6f93988b4f5912ea229589811c00eacd8fa923c31a388730c23c414507f561bf3feb9b486809bbab8ef034eaeccace4f6053b83983ce04a45c65116ff7c89ba27036368c93ef7eb1a79a80079f9654a38cff0ddeffed8e34760f765730d0b07601bd0d7f7d11a95757892ce4b5a4efca794b033d202b4ac6162e3c85dd4383c8a4b1fb79bc776e39155fd18e28d7f2dff27fdb35e0b14920c97fda06c305b2cb0b81fd63a975acd0285fd9d8cb151ada51ba6772b293540043b67b027d8ce9f0867449456f070b0d80007d5e27892724e643ed5a730e918b983e27650525210dc6e4d14c9a654b36b123d9d0612a2de0e709838bcd48a3d8f7f31e57f508bf7a981d1aa889279817290a4e02356b431093ad4b437f792c59505cda2d3d4c018cd067176ed035c1c51fbe540448492e0e443dcbacb35295c0fdd2514ed7440e226248caa4f130e791f91dc7024423fc0a5db03e43e3e9a50073f16e4576930e05bc9821c6ab9a1561bb71b44b61b0190aed8f7ca541edc333c796885c18744aba92d66c425e5db2e8d95da8f594a12707e4a58415bc6f3ae340de031cbf5d174950846cab4e40ab1d8309c186a5b86b7eec00e8f9742281fb70a014de0c53572e2d32a040b96a689b33fa441d214c14ae604d1c4f859004f35b5636d0d8381bee3654e6f054970687901dd5e73da3c1c6e2b56baacc52c543fc93fd2852de0f50b258b6cb0ab50f8ff65cd1c00cb9f721ce437a38161609f6cb7edfa213913dc77bc16c36ec546a8c90964749ded6487043503dac93bc95b838d1ddd82a57f37c8e4f0d3060c749a61a19a0a24f79d8332b7f6b0af85599acf358dad3c979531abcc1678fac33d41c2d8bb8a3e1355e9551f9faf60781d1ff61de076e3467afeedd92f84264cd2eb7fc2a9c7b06a617f9521a0a641b0c979e7a03b9155e1afe90264c50a610a525d5947a6622365e276f74e6c3516aaf0f01399f01a334adc4e172b1845d28739d22c30bf2323258b638f144a79f60d2ec3bba22f691f67ff7a2b338ebe5eb06af48c4da31d8c4a65f5a4c95abeda9f56e1342a36ef8062e7967e8d6cc81280b2ffeca863906a1a97fb770c13443d6cdbd2e6a12e67858b783c441a0902cb617c4e552f86fa40cb929a979191c6dcf269f0bd594e304470d77ff936877e992c4a5aad9f9595496152d420a65fbe0592dfad399924082bc368105bdbfb41172147f86b997049da36ea5470070004320a32b0ffecd57bb2cd4784eea93eb060ca7b7106c35ae0690df127d778f47775a0f86a64d22239086b8750e9c56ca51ebba570a8e1888586e010803c1c44de8431f055824a7331f800ddd41fa2c6fafaa9d9f9056f9a77a675794085be62c3b282016575afca5481b6025100d57546ba020a409589b37e74ec440ca378389cdd977325d7c76dc7ce18bef28e33a4eba395b842039c4bbba38ce76d41e9c8d5e8a9ad8c00cd9d2d8c00c3bc7de5aed71eee950fe791e0380de1d4cf3e9dd5238404a7895cf12c07b7ed54de426d6c5dc510a052654cb7c30a424e911dc7393df14094f3aae06aace9480b2642317d9188819f6c282ca65c0f6161578bedf19a8c7f296b3fb1d6a79ce1cf468f0940f5b9297df2fe57a2c1ab8a77df26ff6dd2296e73cb59ed247acb242f76354c0e77b7106f6ef0116c49518c0832adf8b9e42a376a6f8506d982cd37ef458e38162e6890785ec79c04268fed826c69d9634829321b64b7ae071942e971c9f8672ccfce3b71b074326749dd442ad4dd3946350211eb7d27f0ba7446672859e10fd5351801d99198fcf58f965197add08602a6233cff984794ff5420f83b5b485d6d4c268dc5030edb401e1e31eda02308911993d5131524cf372c157a8d19d41a69fcddfe1467112f8681fd8713b8a8ad44715dda2bacb5bc56c824336f78551c39fb37b29b0aa42719042d1fcc79a81a461f45fcb2d8967fcc2d3a43031056e8505e358bdd68784f77e92ffbd0d6821349e84452b247f66ad8b8d6c1d7ec595b74f8b5d3a33d459a4101107e8b3171bc43ea86abb58ae1ebb2e4c849d5c8fb0b6465e35931b8cfcb5f47ff68eb80a6a893e6d1d894baa64cd4a46a615e196972a2b12e815c5b901e7008569252c06cd34da2096988f16f4f630262b450e56df6fe2732c680835aa4f69ce258e95f662342f4138d0d60d5706d8407e829a4d92d7a601af48ac5aa177789c59f7745ef71b58d1f478e6bc5fd14b2ca89a43e8285ac465b0f5db6aebfaf3b87e784a54a984814159ea443e0a78701ae42d4718f6c93fad119f30d5e489998959c0d8861f00b122ee635c4ef105f5955400450871f60f3e90383a2e235bebda693829e2d391690052c6379d8d03cdde15fbbb4b69</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/19/%E5%A4%A7%E4%BD%AC%E7%9A%84blogs/" rel="prev" title="大佬的blogs">
+      <i class="fa fa-chevron-left"></i> 大佬的blogs
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">gxw</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gxw</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
