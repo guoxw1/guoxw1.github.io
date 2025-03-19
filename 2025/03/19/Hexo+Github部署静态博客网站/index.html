@@ -28,7 +28,7 @@
 <meta property="og:description" content="Hexo+Github部署静态博客网站 声明：本文节选自如何使用 github pages + Hexo + Next 搭建个人博客，更复杂的功能可以参考Hexo的Next主题优化教程  创建Github仓库：  创建以&lt;username&gt;.github.io命名的public github仓库；  安装配置Hexo项目：  在本地安装Hexo框架：npm install -g hex">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-19T13:14:29.025Z">
-<meta property="article:modified_time" content="2025-03-19T13:18:23.219Z">
+<meta property="article:modified_time" content="2025-03-19T14:25:48.946Z">
 <meta property="article:author" content="gxw">
 <meta name="twitter:card" content="summary">
 
@@ -174,7 +174,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2025-03-19 21:14:29 / Modified: 21:18:23" itemprop="dateCreated datePublished" datetime="2025-03-19T21:14:29+08:00">2025-03-19</time>
+              <time title="Created: 2025-03-19 21:14:29 / Modified: 22:25:48" itemprop="dateCreated datePublished" datetime="2025-03-19T21:14:29+08:00">2025-03-19</time>
             </span>
 
           
@@ -268,9 +268,18 @@
 <p>结果就是：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;align&#125;</span><br><span class="line">x = 1\\\\</span><br><span class="line">y = 2</span><br><span class="line">\end&#123;align&#125;</span><br></pre></td></tr></table></figure>
 
-
-
-
+<p><strong>如何增加字数统计：</strong></p>
+<blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://charlesqueen.github.io/2021/08/13/prblem-of-next-1/">Hexo人数统计插件不蒜子问题修补</a>，感谢作者发现的解决方法</p>
+</blockquote>
+<ol>
+<li><p>在next主题的<code>_config.yml</code>文件中将开启不蒜子计数：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这时应该页面底部只显示“|”，没有数字，是因为<code>style=&quot;display: none&quot;</code>导致，修改<code>\blog\themes\next\layout\_third-party\statistics\busuanzi-counter.swig</code>文件为：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span>%- if theme.busuanzi_count.enable %<span class="punctuation">&#125;</span></span><br><span class="line">&lt;div class=<span class="string">&quot;busuanzi-count&quot;</span>&gt;</span><br><span class="line">  &lt;script<span class="punctuation">&#123;</span><span class="punctuation">&#123;</span> pjax <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span> async src=<span class="string">&quot;https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">  <span class="punctuation">&#123;</span>%- if theme.busuanzi_count.total_visitors %<span class="punctuation">&#125;</span></span><br><span class="line">    &lt;span class=<span class="string">&quot;post-meta-item&quot;</span> id=<span class="string">&quot;busuanzi_container_site_uv&quot;</span> style=<span class="string">&quot;display: none;&quot;</span>&gt;</span><br><span class="line">      &lt;span class=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span><br><span class="line">        &lt;i class=<span class="string">&quot;fa fa-&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;&lt;/i&gt;</span><br><span class="line">      &lt;/span&gt;</span><br><span class="line">      &lt;span class=<span class="string">&quot;site-uv&quot;</span> title=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">        &lt;span id=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;&lt;/span&gt;</span><br><span class="line">      &lt;/span&gt;</span><br><span class="line">    &lt;/span&gt;</span><br><span class="line">  <span class="punctuation">&#123;</span>%- endif %<span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="punctuation">&#123;</span>%- if theme.busuanzi_count.total_visitors and theme.busuanzi_count.total_views %<span class="punctuation">&#125;</span></span><br><span class="line">    &lt;span class=<span class="string">&quot;post-meta-divider&quot;</span>&gt;|&lt;/span&gt;</span><br><span class="line">  <span class="punctuation">&#123;</span>%- endif %<span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="punctuation">&#123;</span>%- if theme.busuanzi_count.total_views %<span class="punctuation">&#125;</span></span><br><span class="line">    &lt;span class=<span class="string">&quot;post-meta-item&quot;</span> id=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> style=<span class="string">&quot;display: none;&quot;</span>&gt;</span><br><span class="line">      &lt;span class=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span><br><span class="line">        &lt;i class=<span class="string">&quot;fa fa-&#123;&#123; theme.busuanzi_count.total_views_icon &#125;&#125;&quot;</span>&gt;&lt;/i&gt;</span><br><span class="line">      &lt;/span&gt;</span><br><span class="line">      &lt;span class=<span class="string">&quot;site-pv&quot;</span> title=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_views&#x27;) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">        &lt;span id=<span class="string">&quot;busuanzi_value_site_pv&quot;</span>&gt;&lt;/span&gt;</span><br><span class="line">      &lt;/span&gt;</span><br><span class="line">    &lt;/span&gt;</span><br><span class="line">  <span class="punctuation">&#123;</span>%- endif %<span class="punctuation">&#125;</span></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"><span class="punctuation">&#123;</span>%- endif %<span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>Tip: 本地运行显示的是随机数量，以服务器上运行结果为准。</p>
 
     </div>
 
@@ -399,29 +408,21 @@
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
-
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
         
 <div class="busuanzi-count">
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="Total Visitors">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="Total Visitors">
+      <span id="busuanzi_value_site_uv"></span>
     </span>
     <span class="post-meta-divider">|</span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="Total Views">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="Total Views">
+      <span id="busuanzi_value_site_pv"></span>
     </span>
 </div>
 
